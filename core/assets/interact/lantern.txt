@@ -1,0 +1,7 @@
+UseLight: true
+useAnimation: false
+useParticles: false
+Color: 0.6f 0.2f 0.2f 0.6f
+MaxRadius: 600
+MinRadius: 500
+Texture: torch_1

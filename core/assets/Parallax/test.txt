@@ -1,0 +1,6 @@
+nrOfImages: 5
+img1 width height
+img2 width height
+img3 width height
+img4 width height
+img5 width height

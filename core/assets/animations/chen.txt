@@ -1,0 +1,6 @@
+Spritesheet: chen.png
+Animations: 1
+nrOfFrames: 7
+frameHeight: 60
+frameWidth: 95
+animationSpeed: 5

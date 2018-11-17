@@ -1,0 +1,5 @@
+Name: Chen
+Animation: chen.txt
+Height: 0.25f
+Width: 0.5f
+SightRadius: 600

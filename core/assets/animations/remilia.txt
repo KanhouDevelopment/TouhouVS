@@ -1,0 +1,6 @@
+Spritesheet: remilia.png
+Animations: 1
+nrOfFrames: 8
+frameHeight: 126
+frameWidth: 109
+animationSpeed: 5

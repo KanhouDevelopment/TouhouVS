@@ -1,0 +1,5 @@
+Name: Moukou
+Animation: moukou.txt
+Height: 1.0f
+Width: 0.5f
+SightRadius: 600

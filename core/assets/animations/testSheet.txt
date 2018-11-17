@@ -1,0 +1,10 @@
+Spritesheet: testSheet.png
+Animations: 2
+nrOfFrames: 13
+frameHeight: 192
+frameWidth: 106
+animationSpeed: 5
+nrOfFrames: 8
+frameHeight: 192
+frameWidth: 96
+animationSpeed: 5

@@ -1,0 +1,6 @@
+Spritesheet: marisa.png
+Animations: 1
+nrOfFrames: 14
+frameHeight: 256
+frameWidth: 192
+animationSpeed: 5

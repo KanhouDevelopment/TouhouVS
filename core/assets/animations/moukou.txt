@@ -1,0 +1,6 @@
+Spritesheet: moukou.png
+Animations: 1
+nrOfFrames: 6
+frameHeight: 98
+frameWidth: 93
+animationSpeed: 5

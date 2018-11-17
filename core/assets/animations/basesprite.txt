@@ -1,0 +1,6 @@
+Spritesheet: basesprite.png
+Animations: 1
+nrOfFrames: 1
+frameHeight: 128
+frameWidth: 128
+animationSpeed: 5
