@@ -8,14 +8,14 @@ import novus.gdx.screens.*;
 
 public class GameHandler extends Game{
 
-	SpriteBatch batch;
+	public SpriteBatch batch;
 	
 	@Override
 	public void create() {
 		// TODO: Add creation
 		batch = new SpriteBatch();
 		Assets.loadTextures();
-		setScreen(new KanmonSplash(this));
+		setScreen(new KanhouSplash(this));
 	}
 	
 	@Override
