@@ -1,0 +1,5 @@
+Name: bullet
+Animation: bullet.txt
+Height: 0.17f
+Width: 0.17f
+SightRadius: 5

@@ -64,6 +64,7 @@ public class GameScreen extends ScreenAdapter {
 	private novus.gdx.characters.Character testChar;
 	private novus.gdx.characters.Character remiChar;
 	
+	
 	PlaceObject po1, po2;
 	
 	final GameHandler game;
@@ -94,7 +95,6 @@ public class GameScreen extends ScreenAdapter {
 //		worldCamera = new OrthographicCamera(width, height);
 //		lightCamera = new OrthographicCamera(width*RENDER_TO_WORLD, height*RENDER_TO_WORLD);
 		debugRender = new Box2DDebugRenderer();
-		//Assets.loadTextures();
 		
         backImage = new Texture(Gdx.files.internal("../core/assets/background.png"));
         
@@ -106,6 +106,7 @@ public class GameScreen extends ScreenAdapter {
 		
 		//testAni = new Animation("../core/assets/gothloli.txt");
 		testChar = new novus.gdx.characters.Character("../core/assets/characters/marisa.txt", world.getSpawnX()*64, -1*world.getSpawnY()*64, box2DWorld, rayhandler, world);
+		testChar.setController(game.ctrlHandler.getPlayerController("P1"));
 		charList.add(testChar);
 		
 		
@@ -177,8 +178,21 @@ public class GameScreen extends ScreenAdapter {
     	for(int i = 0; i < charList.size(); ++i) {
     		if(charList.get(i) != null) {
     			batch.draw(charList.get(i).getTex(), (charList.get(i).getBoxX()-charList.get(i).getWidth()/2)*WORLD_TO_RENDER, charList.get(i).getBoxY()*WORLD_TO_RENDER);
+    			
     		}
     	}
+    	//Draw bullets
+    	for(int i = 0; i < charList.size(); ++i) {
+    		if(charList.get(i) != null) {
+    			for(int y = 0; y < charList.get(i).bulletPool.size(); ++y) {
+    				if(charList.get(i).bulletPool.get(y).isActive) {
+    					batch.draw(charList.get(i).bulletPool.get(y).getTex(),charList.get(i).bulletPool.get(y).getX(), charList.get(i).bulletPool.get(y).getY());
+        			}
+    			}
+    		}
+    	}
+    	
+    	
     	
     	//TODO: Draw fore layer here!
     	
@@ -222,7 +236,7 @@ public class GameScreen extends ScreenAdapter {
 			camPosX += 0.1f;
 		} else {
 			//Stop moving in X
-			testChar.moveX(0);
+			//testChar.moveX(0);
 		}
 		if(remiChar != null) {
 			if(Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -237,7 +251,7 @@ public class GameScreen extends ScreenAdapter {
 				//camPosX += 0.1f;
 			} else {
 				//Stop moving in X
-				remiChar.moveX(0);
+				//remiChar.moveX(0);
 			}
 			
 			if(Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -248,7 +262,7 @@ public class GameScreen extends ScreenAdapter {
 			} else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
 				remiChar.moveY(-speed);
 			} else {
-				remiChar.moveY(0);
+				//remiChar.moveY(0);
 			}
 			
 		}
@@ -264,7 +278,7 @@ public class GameScreen extends ScreenAdapter {
 //			testAni.changeAnimation(2);
 			//camPosY -= 0.1f;
 		} else {
-			testChar.moveY(0);
+			//testChar.moveY(0);
 		}
 		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.G)) {
@@ -282,6 +296,7 @@ public class GameScreen extends ScreenAdapter {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
 			remiChar = new novus.gdx.characters.Character("../core/assets/characters/remilia.txt", charList.get(0).getX(), charList.get(0).getY(), box2DWorld, rayhandler, world);
 			charList.add(remiChar);
+			remiChar.setController(game.ctrlHandler.getPlayerController("P2"));
 		}
 		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.T)) {
@@ -326,9 +341,18 @@ public class GameScreen extends ScreenAdapter {
 		
 		//TODO: Switch this to thread
 		for(int i = 0; i < charList.size(); ++i) {
-			if(charList.get(i) != null)
+			if(charList.get(i) != null) {
 				charList.get(i).update();
+				for(int y = 0; y < charList.get(i).bulletPool.size(); ++y) {
+    				if(charList.get(i).bulletPool.get(y).isActive) {
+    					charList.get(i).bulletPool.get(y).update();
+    					//batch.draw(charList.get(i).bulletPool.get(y).getTex(),charList.get(i).bulletPool.get(y).getX(), charList.get(i).bulletPool.get(y).getY());
+        			}
+    			}
+			}
 		}
+	
+    	
 	}
 	
 }

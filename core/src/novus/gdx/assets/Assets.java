@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Assets {
 	public static Map<String, Texture> SPRITESHEETS = new HashMap<String, Texture>();
+	public static Map<String, Texture> TEXTURES = new HashMap<String,Texture>();
 	public static List<Texture> BLOCKS = new ArrayList<Texture>();
 	public static List<Texture> BACK_OBJECT = new ArrayList<Texture>();
 	public static List<Texture> USE_OBJECT = new ArrayList<Texture>();
@@ -25,6 +26,7 @@ public class Assets {
 		SPRITESHEETS.put("chen.png", new Texture(Gdx.files.internal("../core/assets/chen.png")));
 		SPRITESHEETS.put("marisa.png", new Texture(Gdx.files.internal("../core/assets/marisa.png")));
 		SPRITESHEETS.put("basesprite.png", new Texture(Gdx.files.internal("../core/assets/basesprite.png")));
+		TEXTURES.put("bullet.png",  new Texture(Gdx.files.internal("../core/assets/bullet.png")));
 	}
 	
 	private static void loadBlocks() {
