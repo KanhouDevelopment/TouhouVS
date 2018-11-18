@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import novus.gdx.assets.Assets;
+import novus.gdx.characters.Character;
 import novus.gdx.controller.XBox360Pad;
 import novus.gdx.graphics.Animation;
 import novus.gdx.other.Utils;
@@ -39,8 +40,8 @@ public class Bullet {
 	private boolean isFalling = false;
 	private boolean isJumping = false;
 	
-	private float width = 0.5f;
-	private float height = 1.0f;
+	private float width = 0.17f;
+	private float height = 0.17f;
 	
 	private boolean right, down;
 	
@@ -109,9 +110,11 @@ public class Bullet {
 	}
 	
 	public void setTravelingAngleX(float travelingAngleX) {
+		System.out.println("travelingAngleX: " +travelingAngleX);
 		this.travelingAngleX = travelingAngleX;
 	}
 	public void setTravelingAngleY(float travelingAngleY) {
+		System.out.println("travelingAngleY: " + travelingAngleX);
 		this.travelingAngleY = travelingAngleY;
 	}
 	
@@ -120,18 +123,7 @@ public class Bullet {
 		this.moveY();
 	}
 	
-//	public void moveX(float mx) {
-//		body.setLinearVelocity(mx, body.getLinearVelocity().y);
-//		
-//		if(mx > 0)
-//			right = true;
-//		else if( mx < 0 )
-//			right = false;
-//		
-//		if(((body.getPosition().x - width/2)*WORLD_TO_RENDER <= 0 && !right) || ((body.getPosition().x + width/2)*WORLD_TO_RENDER >= levelWorld.getMapWidth()*64 && right)) {
-//			body.setLinearVelocity(0, body.getLinearVelocity().y);
-//		}
-//	}
+	
 	public void moveX() {
 		
 		this.x += this.travelingAngleX * this.BULLET_SPEED;
@@ -142,8 +134,43 @@ public class Bullet {
 		this.y += this.travelingAngleY * -this.BULLET_SPEED;
 	}
 	
+	public Boolean hasCollided(Character character) {
+		Boolean collided = false;
+		if(character.getX() + character.getWidth()< this.x + this.getWidth() || 
+				character.getY() + character.getHeight()< this.y + this.getHeight()) {
+			
+		}
+		return collided;
+	}
+	
+	
+//	 void isCollision(Object x, Object y) {
+//	    Boolean collide = false;
+//	    if (x.getX() + x.getwidth() < y.getX() + y.getWidth() ||
+//	            x.getY() + x.getHeight() < y.getY() + y.getHeight() {
+//	        collide = true;
+//	    }
+//	    return collide;
+//	 }
+//	 public Boolean hasCollided(Object x, Object y) {
+//	    Boolean collide = false;
+//	    if (x.getX() + x.getwidth() < y.getX() + y.getWidth() ||
+//	            x.getY() + x.getHeight() < y.getY() + y.getHeight() {
+//	        collide = true;
+//	    }
+//	    return collide;
+//	 }
+		
 	public Texture getTex() {
 		return Assets.TEXTURES.get("bullet.png");
+	}
+	
+	public float getWidth() {
+		return width;
+	}
+	
+	public float getHeight() {
+		return height;
 	}
 	
 //	public void moveX(float mx) {

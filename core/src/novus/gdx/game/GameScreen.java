@@ -346,6 +346,9 @@ public class GameScreen extends ScreenAdapter {
 				for(int y = 0; y < charList.get(i).bulletPool.size(); ++y) {
     				if(charList.get(i).bulletPool.get(y).isActive) {
     					charList.get(i).bulletPool.get(y).update();
+    					if(charList.get(i).bulletPool.get(y).hasCollided(charList.get(i))) {
+    						charList.get(i).bulletPool.remove(y);
+    					}
     					//batch.draw(charList.get(i).bulletPool.get(y).getTex(),charList.get(i).bulletPool.get(y).getX(), charList.get(i).bulletPool.get(y).getY());
         			}
     			}
