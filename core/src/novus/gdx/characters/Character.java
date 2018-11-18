@@ -271,9 +271,12 @@ public class Character implements ControllerListener{
 					bulletPool.get(bulletCounter).setX(this.getX());
 					bulletPool.get(bulletCounter).setY(this.getY());
 					
-					float vectorLength = (float) Math.sqrt(this.shootAngleX*this.shootAngleX + this.shootAngleY*this.shootAngleY);
-					bulletPool.get(bulletCounter).setTravelingAngleX(this.shootAngleX/ vectorLength);
-					bulletPool.get(bulletCounter).setTravelingAngleY(this.shootAngleY/ vectorLength);
+					float shootAngleX = controller.getAxis(XBox360Pad.AXIS_RIGHT_X);
+					float shootAngleY = controller.getAxis(XBox360Pad.AXIS_RIGHT_Y);
+					
+					float vectorLength = (float) Math.sqrt(shootAngleX*shootAngleX + shootAngleY*shootAngleY);
+					bulletPool.get(bulletCounter).setTravelingAngleX(shootAngleX/ vectorLength);
+					bulletPool.get(bulletCounter).setTravelingAngleY(shootAngleY/ vectorLength);
 					
 					bulletCounter++;
 					
@@ -396,15 +399,9 @@ public class Character implements ControllerListener{
 	public boolean buttonDown(Controller controller, int buttonCode) {
 		// TODO Auto-generated method stub
 		
-		if(buttonCode == XBox360Pad.BUTTON_RB) {
-			
-		}
-		
 		if(buttonCode == XBox360Pad.BUTTON_RB && shootButtonDown == false) {
-			System.out.println("button Down: " + shootButtonDown);
+			//System.out.println("button Down: " + shootButtonDown);
 			shootButtonDown = true;
-			
-			
 		}
 		
 //		if(buttonCode == XBox360Pad.BUTTON_A) {
@@ -418,10 +415,8 @@ public class Character implements ControllerListener{
 	@Override
 	public boolean buttonUp(Controller controller, int buttonCode) {
 		if(buttonCode == XBox360Pad.BUTTON_RB && shootButtonDown == true) {
-			
-			System.out.println("button UP: " + shootButtonDown);
+			//System.out.println("button UP: " + shootButtonDown);
 			shootButtonDown = false;
-			
 		}
 		
 		return false;
@@ -431,20 +426,20 @@ public class Character implements ControllerListener{
 	public boolean axisMoved(Controller controller, int axisCode, float value) {
 		// TODO Auto-generated method stub
 		
-		if(axisCode == XBox360Pad.AXIS_RIGHT_X ) {
-			if(controller.getAxis(axisCode) > 0.4f || controller.getAxis(axisCode) < -0.4f) {
-				shootAngleX = value ;
-				System.out.println("Aiming " + "--- X: " + value );
-
-			}
-		}
-			
-		if(axisCode == XBox360Pad.AXIS_RIGHT_Y) {
-			if(controller.getAxis(axisCode) > 0.4f || controller.getAxis(axisCode) < -0.4f) {
-				shootAngleY = value ;
-				System.out.println("Aiming " + "--- Y: " + value );
-			}
-		}
+//		if(axisCode == XBox360Pad.AXIS_RIGHT_X ) {
+//			if(controller.getAxis(axisCode) > 0.4f || controller.getAxis(axisCode) < -0.4f) {
+//				shootAngleX = value ;
+//				//System.out.println("Aiming " + "--- X: " + value );
+//
+//			}
+//		}
+//			
+//		if(axisCode == XBox360Pad.AXIS_RIGHT_Y) {
+//			if(controller.getAxis(axisCode) > 0.4f || controller.getAxis(axisCode) < -0.4f) {
+//				shootAngleY = value ;
+//				//System.out.println("Aiming " + "--- Y: " + value );
+//			}
+//		}
 		
 //		if(axisCode == XBox360Pad.AXIS_RIGHT_TRIGGER) {
 //			if(controller.getAxis(axisCode) > 0.2f || controller.getAxis(axisCode) < -0.2f) {
@@ -464,7 +459,7 @@ public class Character implements ControllerListener{
 			
 		
 		
-		System.out.println("Axis" + controller.getAxis(axisCode) );
+		//System.out.println("Axis" + controller.getAxis(axisCode) );
 		
 //		if(axisCode == XBox360Pad.AXIS_RIGHT_X ) {
 //			System.out.println("Aiming " + "--- X: " + value );
