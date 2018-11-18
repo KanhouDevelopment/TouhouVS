@@ -1,0 +1,6 @@
+Spritesheet: bullet.png
+Animations: 1
+nrOfFrames: 1
+frameHeight: 16
+frameWidth: 16
+animationSpeed: 0

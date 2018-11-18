@@ -2,12 +2,19 @@ package novus.gdx.characters;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.ControllerListener;
+import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -16,14 +23,18 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
+import novus.gdx.controller.XBox360Pad;
 import novus.gdx.graphics.Animation;
 import novus.gdx.other.Utils;
 import novus.gdx.world.Level;
+import novus.gdx.bullet.Bullet;
+import novus.gdx.bullet.BulletHandler;
 
-public class Character {
+public class Character implements ControllerListener{
 	private int x, y;
 	private int prevX, prevY;
 	private String name;
+	private Controller controller;
 	
 	private Body body;
 	private Animation anim;
@@ -51,6 +62,16 @@ public class Character {
 	
 	private Level levelWorld;
 	
+	private Bullet bullet;
+	public int MAX_NUMBER_OF_BULLETS = 20;
+	public int bulletCounter;
+	private float shootAngleX;
+	private float shootAngleY;
+	private Boolean shootButtonDown = false;
+	
+	public List<Bullet> bulletPool = new ArrayList<>();
+	
+	
 	/*
 	 * paramaters: config file, x, y, world
 	 * width & height and Animation will be retrieved from the config file
@@ -58,6 +79,8 @@ public class Character {
 	public Character(String filePath, int x, int y, World world, RayHandler rh, Level levelWorld) {
 		this.x = x;
 		this.y = y;
+		
+		bulletCounter = 0;
 		
 		//Create body
 		load(filePath, rh);
@@ -79,6 +102,11 @@ public class Character {
 		setLight(rh);
 		
 		this.levelWorld = levelWorld;
+		
+		for(int i = 0; i < 20; i++) {
+			bulletPool.add(new Bullet("../core/assets/Bullets/bullet.txt", getX(), getY(), rh));
+		}
+		
 		//Create animations
 		//TODO: Swap out for the improved general animation system
 		
@@ -88,6 +116,11 @@ public class Character {
 		pl = new PointLight(rh, 256, new Color(1f, 1f, 1f, 0.6f), sightRadius*RENDER_TO_WORLD, body.getPosition().x, body.getPosition().y + height/4);
 		pl.setSoft(true);
 		pl.setStaticLight(true);
+	}
+	
+	public void setController(Controller ctrl) {
+		this.controller = ctrl;
+		this.controller.addListener(this);
 	}
 	
 	private void load(String filePath, RayHandler rh) {
@@ -139,6 +172,7 @@ public class Character {
 	public void moveY(float my) {
 		body.setLinearVelocity(body.getLinearVelocity().x, my);
 	}
+	
 	
 	public TextureRegion getTex() {
 		return anim.getTex();
@@ -211,6 +245,46 @@ public class Character {
 	}
 	
 	public void update() {
+		float moveSpeed = 3;
+		
+		if(controller != null) {
+			
+			if(controller.getAxis(XBox360Pad.AXIS_LEFT_X) > 0.4f || controller.getAxis(XBox360Pad.AXIS_LEFT_X) < -0.4f ) {
+				this.moveX(controller.getAxis(XBox360Pad.AXIS_LEFT_X) * moveSpeed);
+				Gdx.app.log("SIDA", controller.getAxis(XBox360Pad.AXIS_LEFT_X) + "");
+			}
+			else {
+				this.moveX(0);
+			}
+			if(controller.getAxis(XBox360Pad.AXIS_LEFT_Y) > 0.4f || controller.getAxis(XBox360Pad.AXIS_LEFT_Y) < -0.4f ) {
+				this.moveY(controller.getAxis(XBox360Pad.AXIS_LEFT_Y) * -moveSpeed);
+				Gdx.app.log("VERTIKALT", controller.getAxis(XBox360Pad.AXIS_LEFT_Y) +"");
+			}
+			else {
+				this.moveY(0);
+			}
+			
+			if(shootButtonDown == false) {
+				if(bulletCounter < MAX_NUMBER_OF_BULLETS) {
+					bulletPool.get(bulletCounter).isActive = true;
+
+					bulletPool.get(bulletCounter).setX(this.getX());
+					bulletPool.get(bulletCounter).setY(this.getY());
+					
+					float vectorLength = (float) Math.sqrt(this.shootAngleX*this.shootAngleX + this.shootAngleY*this.shootAngleY);
+					bulletPool.get(bulletCounter).setTravelingAngleX(this.shootAngleX/ vectorLength);
+					bulletPool.get(bulletCounter).setTravelingAngleY(this.shootAngleY/ vectorLength);
+					
+					bulletCounter++;
+					
+					shootButtonDown = true;
+				}
+				
+			}
+			
+			
+		}
+		
 		//ticks for falling/jumping
 		if(body.getLinearVelocity().y != 0) {
 			ticks++;
@@ -260,7 +334,6 @@ public class Character {
 	}
 	
 	public void draw(SpriteBatch batch, float WORLD_TO_RENDER) {
-		
 		//idle
 		////
 		if( body.getLinearVelocity().x == 0 && !isJumping && !isFalling) {
@@ -305,5 +378,126 @@ public class Character {
 		}
 
 		
+	}
+
+	@Override
+	public void connected(Controller controller) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void disconnected(Controller controller) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean buttonDown(Controller controller, int buttonCode) {
+		// TODO Auto-generated method stub
+		
+		if(buttonCode == XBox360Pad.BUTTON_RB) {
+			
+		}
+		
+		if(buttonCode == XBox360Pad.BUTTON_RB && shootButtonDown == false) {
+			System.out.println("button Down: " + shootButtonDown);
+			shootButtonDown = true;
+			
+			
+		}
+		
+//		if(buttonCode == XBox360Pad.BUTTON_A) {
+//			System.out.println("Shooting!");
+//			
+//		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean buttonUp(Controller controller, int buttonCode) {
+		if(buttonCode == XBox360Pad.BUTTON_RB && shootButtonDown == true) {
+			
+			System.out.println("button UP: " + shootButtonDown);
+			shootButtonDown = false;
+			
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean axisMoved(Controller controller, int axisCode, float value) {
+		// TODO Auto-generated method stub
+		
+		if(axisCode == XBox360Pad.AXIS_RIGHT_X ) {
+			if(controller.getAxis(axisCode) > 0.4f || controller.getAxis(axisCode) < -0.4f) {
+				shootAngleX = value ;
+				System.out.println("Aiming " + "--- X: " + value );
+
+			}
+		}
+			
+		if(axisCode == XBox360Pad.AXIS_RIGHT_Y) {
+			if(controller.getAxis(axisCode) > 0.4f || controller.getAxis(axisCode) < -0.4f) {
+				shootAngleY = value ;
+				System.out.println("Aiming " + "--- Y: " + value );
+			}
+		}
+		
+//		if(axisCode == XBox360Pad.AXIS_RIGHT_TRIGGER) {
+//			if(controller.getAxis(axisCode) > 0.2f || controller.getAxis(axisCode) < -0.2f) {
+//
+//				System.out.println("Shooting ");
+//			}
+//		}
+//		
+//		if(axisCode == XBox360Pad.AXIS_LEFT_TRIGGER) {
+//			if(controller.getAxis(axisCode) > 0.2f || controller.getAxis(axisCode) < -0.2f) {
+//
+//				System.out.println("Left trigger ");
+//			}
+//		}
+		
+		
+			
+		
+		
+		System.out.println("Axis" + controller.getAxis(axisCode) );
+		
+//		if(axisCode == XBox360Pad.AXIS_RIGHT_X ) {
+//			System.out.println("Aiming " + "--- X: " + value );
+//		}
+//			
+//		if(axisCode == XBox360Pad.AXIS_RIGHT_Y) {
+//			System.out.println("Aiming " + "--- Y: " + value );
+//		}
+		return false;
+	}
+
+	@Override
+	public boolean povMoved(Controller controller, int povCode, PovDirection value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) {
+		// TODO Auto-generated method stub
+		
+		return false;
+	}
+
+	@Override
+	public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
