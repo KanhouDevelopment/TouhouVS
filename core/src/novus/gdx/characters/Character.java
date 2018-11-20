@@ -68,6 +68,8 @@ public class Character implements ControllerListener{
 	private float shootAngleX;
 	private float shootAngleY;
 	private Boolean shootButtonDown = false;
+	private Boolean isShooting = false;
+	
 	
 	public List<Bullet> bulletPool = new ArrayList<>();
 	
@@ -250,6 +252,13 @@ public class Character implements ControllerListener{
 		return anim.getTex();
 	}
 	
+	public Boolean getIsShooting() {
+		return this.isShooting;
+	}
+	public void setIsShooting(Boolean state) {
+		this.isShooting = state;
+	}
+	
 	public void update() {
 		float moveSpeed = 3;
 		
@@ -270,7 +279,7 @@ public class Character implements ControllerListener{
 				this.moveY(0);
 			}
 			
-			if(shootButtonDown == false) {
+			if(shootButtonDown == false && isShooting == true) {
 				if(bulletCounter < MAX_NUMBER_OF_BULLETS) {
 					bulletPool.get(bulletCounter).isActive = true;
 
@@ -287,10 +296,32 @@ public class Character implements ControllerListener{
 					bulletCounter++;
 					
 					shootButtonDown = true;
+					isShooting = false;
 				}
-				
 			}
-			
+		}
+		
+		
+		//Keyboard input
+		if(shootButtonDown == false && isShooting == true) {
+			if(bulletCounter < MAX_NUMBER_OF_BULLETS) {
+				bulletPool.get(bulletCounter).isActive = true;
+
+				bulletPool.get(bulletCounter).setX(this.getX());
+				bulletPool.get(bulletCounter).setY(this.getY());
+				
+				float shootAngleX = 0.5f;
+				float shootAngleY = 0.5f;
+				
+				float vectorLength = (float) Math.sqrt(shootAngleX*shootAngleX + shootAngleY*shootAngleY);
+				bulletPool.get(bulletCounter).setTravelingAngleX(shootAngleX/ vectorLength);
+				bulletPool.get(bulletCounter).setTravelingAngleY(shootAngleY/ vectorLength);
+				
+				bulletCounter++;
+				
+				shootButtonDown = false;
+				isShooting = false;
+			}
 			
 		}
 		
@@ -408,6 +439,7 @@ public class Character implements ControllerListener{
 		if(buttonCode == XBox360Pad.BUTTON_RB && shootButtonDown == false) {
 			//System.out.println("button Down: " + shootButtonDown);
 			shootButtonDown = true;
+			isShooting = true;
 		}
 		
 //		if(buttonCode == XBox360Pad.BUTTON_A) {
@@ -423,6 +455,7 @@ public class Character implements ControllerListener{
 		if(buttonCode == XBox360Pad.BUTTON_RB && shootButtonDown == true) {
 			//System.out.println("button UP: " + shootButtonDown);
 			shootButtonDown = false;
+			isShooting = false;
 		}
 		
 		return false;

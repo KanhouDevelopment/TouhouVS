@@ -136,9 +136,9 @@ public class Bullet {
 	
 	public Boolean hasCollided(Character character) {
 		Boolean collided = false;
-		if(character.getX() + character.getWidth()< this.x + this.getWidth() || 
-				character.getY() + character.getHeight()< this.y + this.getHeight()) {
-			
+		if(character.getX() + character.getWidth() < this.x + this.getWidth() || 
+				character.getY() + character.getHeight() < this.y + this.getHeight()) {
+			collided = true;
 		}
 		return collided;
 	}

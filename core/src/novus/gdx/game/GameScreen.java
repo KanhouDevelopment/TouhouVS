@@ -296,6 +296,22 @@ public class GameScreen extends ScreenAdapter {
 			//testChar.moveY(0);
 		}
 		
+		if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+			if(charList.contains(remiChar)) {
+				if(!remiChar.getIsShooting()) {
+					remiChar.setIsShooting(true);
+				}
+			}
+		}
+		
+		if(Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+			if(charList.contains(testChar)) {
+				if(!testChar.getIsShooting()) {
+					testChar.setIsShooting(true);
+				}
+			}
+		}
+		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.G)) {
 			showDebug = !showDebug;
 		}
