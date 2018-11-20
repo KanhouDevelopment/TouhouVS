@@ -173,6 +173,12 @@ public class Bullet {
 		return height;
 	}
 	
+	public Boolean isActive() {
+		return this.isActive;
+	}
+	public void setActiveState(Boolean state) {
+		this.isActive = state;
+	}
 //	public void moveX(float mx) {
 //		body.setLinearVelocity(mx, body.getLinearVelocity().y);
 //		

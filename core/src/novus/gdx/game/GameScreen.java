@@ -106,7 +106,10 @@ public class GameScreen extends ScreenAdapter {
 		
 		//testAni = new Animation("../core/assets/gothloli.txt");
 		testChar = new novus.gdx.characters.Character("../core/assets/characters/marisa.txt", world.getSpawnX()*64, -1*world.getSpawnY()*64, box2DWorld, rayhandler, world);
-		testChar.setController(game.ctrlHandler.getPlayerController("P1"));
+		if(!game.ctrlHandler.getPlayersController().isEmpty()) {
+			testChar.setController(game.ctrlHandler.getPlayerController("P1"));
+		}
+		
 		charList.add(testChar);
 		
 		
@@ -236,7 +239,10 @@ public class GameScreen extends ScreenAdapter {
 			camPosX += 0.1f;
 		} else {
 			//Stop moving in X
-			//testChar.moveX(0);
+			
+			if(testChar.getController() == null) {
+				testChar.moveX(0);
+			}
 		}
 		if(remiChar != null) {
 			if(Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -251,7 +257,10 @@ public class GameScreen extends ScreenAdapter {
 				//camPosX += 0.1f;
 			} else {
 				//Stop moving in X
-				//remiChar.moveX(0);
+				if(remiChar.getController() == null) {
+					remiChar.moveX(0);
+				}
+				//
 			}
 			
 			if(Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -262,6 +271,9 @@ public class GameScreen extends ScreenAdapter {
 			} else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
 				remiChar.moveY(-speed);
 			} else {
+				if(remiChar.getController() == null) {
+					remiChar.moveY(0);
+				}
 				//remiChar.moveY(0);
 			}
 			
@@ -278,6 +290,9 @@ public class GameScreen extends ScreenAdapter {
 //			testAni.changeAnimation(2);
 			//camPosY -= 0.1f;
 		} else {
+			if(testChar.getController() == null) {
+				testChar.moveY(0);
+			}
 			//testChar.moveY(0);
 		}
 		
@@ -296,7 +311,10 @@ public class GameScreen extends ScreenAdapter {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
 			remiChar = new novus.gdx.characters.Character("../core/assets/characters/remilia.txt", charList.get(0).getX(), charList.get(0).getY(), box2DWorld, rayhandler, world);
 			charList.add(remiChar);
-			remiChar.setController(game.ctrlHandler.getPlayerController("P2"));
+			if(game.ctrlHandler.getPlayersController().size() > 1) {
+				remiChar.setController(game.ctrlHandler.getPlayerController("P2"));
+			}
+			
 		}
 		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.T)) {
@@ -343,11 +361,15 @@ public class GameScreen extends ScreenAdapter {
 		for(int i = 0; i < charList.size(); ++i) {
 			if(charList.get(i) != null) {
 				charList.get(i).update();
+				
+				//For every character, draw the active bullets
 				for(int y = 0; y < charList.get(i).bulletPool.size(); ++y) {
     				if(charList.get(i).bulletPool.get(y).isActive) {
     					charList.get(i).bulletPool.get(y).update();
     					if(charList.get(i).bulletPool.get(y).hasCollided(charList.get(i))) {
-    						charList.get(i).bulletPool.remove(y);
+    						System.out.println("HAS COLLIDED");
+    						//charList.get(i).bulletPool.get(y).isActive == false
+//    						charList.get(i).bulletPool.remove(y);
     					}
     					//batch.draw(charList.get(i).bulletPool.get(y).getTex(),charList.get(i).bulletPool.get(y).getX(), charList.get(i).bulletPool.get(y).getY());
         			}

@@ -118,10 +118,16 @@ public class Character implements ControllerListener{
 		pl.setStaticLight(true);
 	}
 	
+	
+	public Controller getController() {
+		return this.controller;
+	}
+	
 	public void setController(Controller ctrl) {
 		this.controller = ctrl;
 		this.controller.addListener(this);
 	}
+	
 	
 	private void load(String filePath, RayHandler rh) {
 		try {
