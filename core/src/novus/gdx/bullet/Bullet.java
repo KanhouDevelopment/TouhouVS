@@ -179,6 +179,11 @@ public class Bullet {
 	public void setActiveState(Boolean state) {
 		this.isActive = state;
 	}
+	
+	public void resetBullet() {
+		System.out.println("Reseting bullet");
+		this.isActive = false;
+	}
 //	public void moveX(float mx) {
 //		body.setLinearVelocity(mx, body.getLinearVelocity().y);
 //		
