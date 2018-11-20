@@ -136,10 +136,13 @@ public class Bullet {
 	
 	public Boolean hasCollided(Character character) {
 		Boolean collided = false;
-		if(character.getX() + character.getWidth() < this.x + this.getWidth() || 
-				character.getY() + character.getHeight() < this.y + this.getHeight()) {
+		
+		if((x > character.getX() && x < (character.getWidth()/2 * WORLD_TO_RENDER)) && 
+				(y < character.getY() && y < (character.getHeight()/2 * WORLD_TO_RENDER))) {
 			collided = true;
+			System.out.println("Has Collided!");
 		}
+		
 		return collided;
 	}
 	
@@ -183,6 +186,7 @@ public class Bullet {
 	public void resetBullet() {
 		System.out.println("Reseting bullet");
 		this.isActive = false;
+		
 	}
 //	public void moveX(float mx) {
 //		body.setLinearVelocity(mx, body.getLinearVelocity().y);

@@ -279,7 +279,7 @@ public class Character implements ControllerListener{
 				this.moveY(0);
 			}
 			
-			if(shootButtonDown == false && isShooting == true) {
+			if(shootButtonDown == true && isShooting == true) {
 				if(bulletCounter < MAX_NUMBER_OF_BULLETS) {
 					bulletPool.get(bulletCounter).isActive = true;
 
@@ -302,28 +302,28 @@ public class Character implements ControllerListener{
 		}
 		
 		
-		//Keyboard input
-		if(shootButtonDown == false && isShooting == true) {
-			if(bulletCounter < MAX_NUMBER_OF_BULLETS) {
-				bulletPool.get(bulletCounter).isActive = true;
-
-				bulletPool.get(bulletCounter).setX(this.getX());
-				bulletPool.get(bulletCounter).setY(this.getY());
-				
-				float shootAngleX = 0.5f;
-				float shootAngleY = 0.5f;
-				
-				float vectorLength = (float) Math.sqrt(shootAngleX*shootAngleX + shootAngleY*shootAngleY);
-				bulletPool.get(bulletCounter).setTravelingAngleX(shootAngleX/ vectorLength);
-				bulletPool.get(bulletCounter).setTravelingAngleY(shootAngleY/ vectorLength);
-				
-				bulletCounter++;
-				
-				shootButtonDown = false;
-				isShooting = false;
-			}
-			
-		}
+//		//Keyboard input
+//		if(shootButtonDown == false && isShooting == true) {
+//			if(bulletCounter < MAX_NUMBER_OF_BULLETS) {
+//				bulletPool.get(bulletCounter).isActive = true;
+//
+//				bulletPool.get(bulletCounter).setX(this.getX());
+//				bulletPool.get(bulletCounter).setY(this.getY());
+//				
+//				float shootAngleX = 0.5f;
+//				float shootAngleY = 0.5f;
+//				
+//				float vectorLength = (float) Math.sqrt(shootAngleX*shootAngleX + shootAngleY*shootAngleY);
+//				bulletPool.get(bulletCounter).setTravelingAngleX(shootAngleX/ vectorLength);
+//				bulletPool.get(bulletCounter).setTravelingAngleY(shootAngleY/ vectorLength);
+//				
+//				bulletCounter++;
+//				
+//				shootButtonDown = false;
+//				isShooting = false;
+//			}
+//			
+//		}
 		
 		//ticks for falling/jumping
 		if(body.getLinearVelocity().y != 0) {

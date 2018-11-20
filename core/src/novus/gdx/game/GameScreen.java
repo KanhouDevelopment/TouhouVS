@@ -384,9 +384,10 @@ public class GameScreen extends ScreenAdapter {
     					charList.get(i).bulletPool.get(y).update();
 //    					
 //    					if(!charList.get(i).isTeam()) {
-    						if(charList.get(i).bulletPool.get(y).hasCollided(charList.get(i))) {
+    					//if(charList.get(i).bulletPool.get(y).hasCollided(charList.get(i))) {
+    						if(testChar.bulletPool.get(y).hasCollided(remiChar)) {
         						
-        						charList.get(i).bulletPool.get(y).resetBullet();
+    							testChar.bulletPool.get(y).resetBullet();
         						
         						//System.out.println("HAS COLLIDED");
         						//charList.get(i).bulletPool.get(y).isActive = false;
