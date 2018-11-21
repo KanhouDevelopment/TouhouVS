@@ -109,13 +109,13 @@ public class Bullet {
 		return travelingAngleY;
 	}
 	
-	public void setTravelingAngleX(float travelingAngleX) {
-		System.out.println("travelingAngleX: " +travelingAngleX);
-		this.travelingAngleX = travelingAngleX;
+	public void setTravelingAngleX(float x) {
+		System.out.println("travelingAngleX: " + x);
+		this.travelingAngleX = x;
 	}
-	public void setTravelingAngleY(float travelingAngleY) {
-		System.out.println("travelingAngleY: " + travelingAngleX);
-		this.travelingAngleY = travelingAngleY;
+	public void setTravelingAngleY(float y) {
+		System.out.println("travelingAngleY: " + y);
+		this.travelingAngleY = y;
 	}
 	
 	public void update() {
@@ -134,35 +134,21 @@ public class Bullet {
 		this.y += this.travelingAngleY * -this.BULLET_SPEED;
 	}
 	
+	//When bullet has collided with character TODO: Put in a collisionhandler if collision with other entities is needed.
 	public Boolean hasCollided(Character character) {
 		Boolean collided = false;
+		int charXPos = character.getX();
+		int charYPos = character.getY();
+		float charWidth = character.getWidth()/2 * WORLD_TO_RENDER;
+		float charHeight = character.getHeight()/2 * WORLD_TO_RENDER;
 		
-		if((x > character.getX() && x < (character.getWidth()/2 * WORLD_TO_RENDER)) && 
-				(y < character.getY() && y < (character.getHeight()/2 * WORLD_TO_RENDER))) {
+		if((x > charXPos && x < charXPos + charWidth) &&
+				(y < charYPos && y > charYPos - charHeight)) {
 			collided = true;
-			System.out.println("Has Collided!");
 		}
 		
 		return collided;
 	}
-	
-	
-//	 void isCollision(Object x, Object y) {
-//	    Boolean collide = false;
-//	    if (x.getX() + x.getwidth() < y.getX() + y.getWidth() ||
-//	            x.getY() + x.getHeight() < y.getY() + y.getHeight() {
-//	        collide = true;
-//	    }
-//	    return collide;
-//	 }
-//	 public Boolean hasCollided(Object x, Object y) {
-//	    Boolean collide = false;
-//	    if (x.getX() + x.getwidth() < y.getX() + y.getWidth() ||
-//	            x.getY() + x.getHeight() < y.getY() + y.getHeight() {
-//	        collide = true;
-//	    }
-//	    return collide;
-//	 }
 		
 	public Texture getTex() {
 		return Assets.TEXTURES.get("bullet.png");
@@ -183,9 +169,16 @@ public class Bullet {
 		this.isActive = state;
 	}
 	
-	public void resetBullet() {
+	public void resetBullet(Character character) {
 		System.out.println("Reseting bullet");
 		this.isActive = false;
+		character.decreaseBulletCounter(1);
+		System.err.println("3");
+		this.x = character.getX();
+		this.y = character.getY();
+		System.err.println("4");
+		this.travelingAngleX = 0;
+		this.travelingAngleY = 0;
 		
 	}
 //	public void moveX(float mx) {

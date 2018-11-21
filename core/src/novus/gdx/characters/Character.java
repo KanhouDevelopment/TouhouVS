@@ -63,8 +63,8 @@ public class Character implements ControllerListener{
 	private Level levelWorld;
 	
 	private Bullet bullet;
-	public int MAX_NUMBER_OF_BULLETS = 20;
-	public int bulletCounter;
+	public final int MAX_NUMBER_OF_BULLETS = 20;
+	private int bulletCounter;
 	private float shootAngleX;
 	private float shootAngleY;
 	private Boolean shootButtonDown = false;
@@ -130,6 +130,22 @@ public class Character implements ControllerListener{
 		this.controller.addListener(this);
 	}
 	
+	public int getBulletCounter() {
+		return this.bulletCounter;
+	}
+	
+	public void increaseBulletCounter(int nr) {
+		this.bulletCounter += nr;
+		if(this.bulletCounter >= 20) {
+			this.bulletCounter = 19;
+		}
+	}
+	public void decreaseBulletCounter(int nr) {
+		this.bulletCounter -= nr;
+		if(this.bulletCounter < 0) {
+			this.bulletCounter = 0;
+		}
+	}
 	
 	private void load(String filePath, RayHandler rh) {
 		try {
@@ -259,6 +275,15 @@ public class Character implements ControllerListener{
 		this.isShooting = state;
 	}
 	
+	public Bullet getInactiveBullet() {
+		for(int i = 0; i < MAX_NUMBER_OF_BULLETS; i++) {
+			if(!bulletPool.get(i).isActive()) {
+				return bulletPool.get(i);
+			}
+		}
+		return null;
+	}
+	
 	public void update() {
 		float moveSpeed = 3;
 		
@@ -282,7 +307,7 @@ public class Character implements ControllerListener{
 			if(shootButtonDown == true && isShooting == true) {
 				if(bulletCounter < MAX_NUMBER_OF_BULLETS) {
 					bulletPool.get(bulletCounter).isActive = true;
-
+	
 					bulletPool.get(bulletCounter).setX(this.getX());
 					bulletPool.get(bulletCounter).setY(this.getY());
 					
@@ -298,12 +323,54 @@ public class Character implements ControllerListener{
 					shootButtonDown = true;
 					isShooting = false;
 				}
+				
+//				if(bulletCounter < MAX_NUMBER_OF_BULLETS) {
+//					bulletPool.get(bulletCounter).isActive = true;
+//
+//					bulletPool.get(bulletCounter).setX(this.getX());
+//					bulletPool.get(bulletCounter).setY(this.getY());
+//					
+//					float shootAngleX = controller.getAxis(XBox360Pad.AXIS_RIGHT_X);
+//					float shootAngleY = controller.getAxis(XBox360Pad.AXIS_RIGHT_Y);
+//					
+//					float vectorLength = (float) Math.sqrt(shootAngleX*shootAngleX + shootAngleY*shootAngleY);
+//					bulletPool.get(bulletCounter).setTravelingAngleX(shootAngleX/ vectorLength);
+//					bulletPool.get(bulletCounter).setTravelingAngleY(shootAngleY/ vectorLength);
+//					
+//					bulletCounter++;
+//					
+//					shootButtonDown = true;
+//					isShooting = false;
+//				}
 			}
 		}
 		
 		
-//		//Keyboard input
-//		if(shootButtonDown == false && isShooting == true) {
+		//Keyboard input
+		if(shootButtonDown == false && isShooting == true) {
+			if(bulletCounter < MAX_NUMBER_OF_BULLETS) {
+				getInactiveBullet().isActive = true;
+
+				System.err.println("1");
+				getInactiveBullet().setX(this.getX());
+				getInactiveBullet().setY(this.getY());
+
+				System.err.println("2");
+				
+				
+				float shootAngleX = 0.5f;
+				float shootAngleY = 0.5f;
+				
+				float vectorLength = (float) Math.sqrt(shootAngleX*shootAngleX + shootAngleY*shootAngleY);
+				getInactiveBullet().setTravelingAngleX(shootAngleX/ vectorLength);
+				getInactiveBullet().setTravelingAngleY(shootAngleY/ vectorLength);
+				bulletCounter++;
+				
+				shootButtonDown = false;
+				isShooting = false;
+			}
+			
+			
 //			if(bulletCounter < MAX_NUMBER_OF_BULLETS) {
 //				bulletPool.get(bulletCounter).isActive = true;
 //
@@ -322,8 +389,8 @@ public class Character implements ControllerListener{
 //				shootButtonDown = false;
 //				isShooting = false;
 //			}
-//			
-//		}
+			
+		}
 		
 		//ticks for falling/jumping
 		if(body.getLinearVelocity().y != 0) {
